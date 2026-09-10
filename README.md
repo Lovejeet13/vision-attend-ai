@@ -48,12 +48,3 @@ The system should:
 6. Allow attendance records to be downloaded.
 
 ---
-
-# 🚀 How to Use
-
-## Step 1 — Start the Application
-
-Run the Flask application:
-
-```bash
-python app.py
