@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #D6E0E1;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Logo (Top Left) */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 350px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        /* Vision Attend Title */
+        .vision-title {
+            font-size: 80px;
+            font-weight: bold;
+            color: #031019;
+            margin-top: 80px;
+            margin-bottom: 0px;
+        }
+
+        /* Table */
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        th, td {
+            border: 1px solid #031019;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #031019;
+            color: white;
+        }
+
+        /* Back Button */
+        .btn {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: #031019;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #04202F;
+        }
+
+        /* Logo1 (Bottom Right) */
+        .logo1 {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Logo (Click to Redirect to Upload Page) -->
+    <img src="{{ url_for('static', filename='LOGO.png') }}" alt="Logo" class="logo" onclick="window.location.href='{{ url_for('home') }}'">
+
+    <!-- Vision Attend Title -->
+    <h1 class="vision-title">Vision Attend</h1>
+
+    <!-- Attendance Records Table -->
+    <h1>Attendance Records</h1>
+    <table>
+        <tr>
+            <th>Sr. No.</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Attendance</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row["Sr. No."] }}</td>
+            <td>{{ row["ID"] }}</td>
+            <td>{{ row["Name"] }}</td>
+            <td>{{ row["Attendance"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Back to Home Button -->
+    <a href="/" class="btn">Back to Home</a>
+
+    <!-- Logo1 (Bottom Right) -->
+    <img src="{{ url_for('static', filename='LOGO1.png') }}" alt="Logo1" class="logo1">
+
+</body>
+</html>

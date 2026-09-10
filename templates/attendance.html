@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Face Recognition Attendance</title>
+
+
+    <style>
+
+        /* =========================
+           GLOBAL
+        ========================= */
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            text-align: center;
+
+            background: #D6E0E1;
+
+            margin: 0;
+
+            padding: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            position: relative;
+        }
+
+
+        /* =========================
+           LOGO
+        ========================= */
+
+        .logo {
+
+            position: absolute;
+
+            top: 20px;
+
+            left: 20px;
+
+            width: 350px;
+
+            height: auto;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .main-container {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 40px;
+
+            margin-top: 20px;
+
+            flex-wrap: wrap;
+
+            width: 95%;
+        }
+
+
+        /* =========================
+           SIDE BOX
+        ========================= */
+
+        .side-box {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0px 5px 15px rgba(0, 0, 0, 0.2);
+
+            width: 300px;
+
+            text-align: center;
+
+            border: 3px solid #031019;
+
+            flex: 1;
+
+            min-width: 280px;
+
+            align-self: center;
+        }
+
+
+        /* =========================
+           VIDEO BOX
+        ========================= */
+
+        .video-box {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0px 5px 15px rgba(0, 0, 0, 0.2);
+
+            width: 450px;
+
+            text-align: center;
+
+            border: 3px solid #031019;
+
+            flex: 1.5;
+
+            min-width: 400px;
+        }
+
+
+        h2 {
+
+            color: #031019;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            background: #031019;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-top: 15px;
+
+            transition: 0.3s;
+        }
+
+
+        button:hover {
+
+            background: #04202F;
+        }
+
+
+        /* =========================
+           STOP BUTTON
+        ========================= */
+
+        #stopAttendance {
+
+            display: none;
+
+            background: red;
+        }
+
+
+        #stopAttendance:hover {
+
+            background: darkred;
+        }
+
+
+        /* =========================
+           VIDEO
+        ========================= */
+
+        .video-container {
+
+            display: none;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin-top: 15px;
+        }
+
+
+        .video-container video {
+
+            width: 100%;
+
+            max-width: 640px;
+
+            border-radius: 10px;
+
+            border: 3px solid #031019;
+
+            display: block;
+        }
+
+
+        /* =========================
+           DETECTED PERSON
+        ========================= */
+
+        #detectedPersonBox {
+
+            display: none;
+        }
+
+
+        #detectedName {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            color: #031019;
+
+            margin-top: 20px;
+
+            line-height: 1.6;
+        }
+
+
+        #attendanceResult {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-top: 10px;
+        }
+
+
+        .success {
+
+            color: green;
+        }
+
+
+        .error {
+
+            color: red;
+        }
+
+
+        .waiting {
+
+            color: #031019;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            body {
+
+                height: auto;
+
+                min-height: 100vh;
+
+                padding-top: 120px;
+
+                padding-bottom: 30px;
+            }
+
+
+            .logo {
+
+                width: 250px;
+
+                top: 15px;
+
+                left: 15px;
+            }
+
+
+            .main-container {
+
+                flex-direction: column;
+
+                width: 90%;
+            }
+
+
+            .side-box,
+            .video-box {
+
+                width: 90%;
+
+                min-width: unset;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         LOGO
+    ========================== -->
+
+    <img
+        src="{{ url_for('static', filename='LOGO.png') }}"
+        alt="Logo"
+        class="logo"
+        onclick="window.location.href='{{ url_for('home') }}'"
+    >
+
+
+    <!-- =========================
+         MAIN CONTAINER
+    ========================== -->
+
+    <div class="main-container">
+
+
+        <!-- =========================
+             ATTENDANCE CONTROL
+        ========================== -->
+
+        <div class="side-box">
+
+            <h2>
+                Attendance Control
+            </h2>
+
+
+            <button
+                id="startAttendance"
+                onclick="startAttendance()">
+
+                Start Attendance
+
+            </button>
+
+
+            <button
+                id="stopAttendance"
+                onclick="stopAttendance()">
+
+                Stop Attendance
+
+            </button>
+
+
+            <p id="attendanceStatus">
+
+                Ready to start...
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =========================
+             LIVE VIDEO
+        ========================== -->
+
+        <div class="video-box">
+
+            <h2>
+                Live Video Feed
+            </h2>
+
+
+            <div
+                class="video-container"
+                id="videoContainer">
+
+                <video
+                    id="videoFeed"
+                    autoplay
+                    playsinline>
+                </video>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             DETECTED PERSON
+        ========================== -->
+
+        <div
+            class="side-box"
+            id="detectedPersonBox">
+
+            <h2>
+                Detected Person
+            </h2>
+
+
+            <p
+                id="detectedName"
+                class="waiting">
+
+                Scanning...
+
+            </p>
+
+
+            <div id="attendanceResult"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Canvas for capturing frames -->
+
+    <canvas
+        id="canvas"
+        width="640"
+        height="480"
+        style="display:none;">
+    </canvas>
+
+
+
+    <script>
+
+        /* ==========================================
+           VARIABLES
+        ========================================== */
+
+        let cameraStream = null;
+
+        let frameInterval = null;
+
+        let attendanceCompleted = false;
+
+        let processingFrame = false;
+
+
+
+        /* ==========================================
+           START ATTENDANCE
+        ========================================== */
+
+        async function startAttendance() {
+
+            try {
+
+                /* Reset state */
+
+                attendanceCompleted = false;
+
+                processingFrame = false;
+
+
+                /* =================================
+                   Tell Flask to start attendance
+                ================================= */
+
+                const response =
+                    await fetch("/start_attendance");
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not start attendance"
+                    );
+                }
+
+
+                /* =================================
+                   Get camera
+                ================================= */
+
+                cameraStream =
+                    await navigator.mediaDevices
+                        .getUserMedia({
+
+                            video: {
+
+                                width: {
+                                    ideal: 640
+                                },
+
+                                height: {
+                                    ideal: 480
+                                },
+
+                                facingMode: "user"
+                            },
+
+                            audio: false
+                        });
+
+
+                /* =================================
+                   Connect camera to video
+                ================================= */
+
+                const video =
+                    document.getElementById(
+                        "videoFeed"
+                    );
+
+
+                video.srcObject =
+                    cameraStream;
+
+
+                await video.play();
+
+
+                /* =================================
+                   Show UI
+                ================================= */
+
+                document.getElementById(
+                    "videoContainer"
+                ).style.display = "flex";
+
+
+                document.getElementById(
+                    "detectedPersonBox"
+                ).style.display = "block";
+
+
+                document.getElementById(
+                    "startAttendance"
+                ).style.display = "none";
+
+
+                document.getElementById(
+                    "stopAttendance"
+                ).style.display = "block";
+
+
+                document.getElementById(
+                    "attendanceStatus"
+                ).innerText =
+                    "Attendance is running...";
+
+
+                document.getElementById(
+                    "detectedName"
+                ).innerText =
+                    "Scanning...";
+
+
+                document.getElementById(
+                    "detectedName"
+                ).className =
+                    "waiting";
+
+
+                document.getElementById(
+                    "attendanceResult"
+                ).innerText = "";
+
+
+                /* =================================
+                   Wait for camera frame
+                ================================= */
+
+                setTimeout(
+                    () => {
+
+                        processFrame();
+
+                        startFrameProcessing();
+
+                    },
+                    500
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Camera error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "attendanceStatus"
+                ).innerText =
+                    "Camera could not be started";
+
+
+                alert(
+                    "Please allow camera access in your browser."
+                );
+
+            }
+
+        }
+
+
+
+        /* ==========================================
+           START FRAME PROCESSING
+        ========================================== */
+
+        function startFrameProcessing() {
+
+            /* Prevent duplicate intervals */
+
+            if (frameInterval !== null) {
+
+                clearInterval(
+                    frameInterval
+                );
+
+            }
+
+
+            /*
+                Process every 1.5 seconds.
+
+                This is enough for attendance
+                and reduces CPU usage.
+            */
+
+            frameInterval =
+                setInterval(
+                    processFrame,
+                    1500
+                );
+
+        }
+
+
+
+        /* ==========================================
+           PROCESS FRAME
+        ========================================== */
+
+        async function processFrame() {
+
+            /* Stop after successful recognition */
+
+            if (attendanceCompleted) {
+
+                return;
+
+            }
+
+
+            /* Don't send multiple requests */
+
+            if (processingFrame) {
+
+                return;
+
+            }
+
+
+            processingFrame = true;
+
+
+            try {
+
+                const video =
+                    document.getElementById(
+                        "videoFeed"
+                    );
+
+
+                const canvas =
+                    document.getElementById(
+                        "canvas"
+                    );
+
+
+                /* Check video */
+
+                if (
+                    video.readyState <
+                    HTMLMediaElement.HAVE_CURRENT_DATA
+                ) {
+
+                    return;
+
+                }
+
+
+                /* =================================
+                   Capture frame
+                ================================= */
+
+                const context =
+                    canvas.getContext("2d");
+
+
+                context.drawImage(
+
+                    video,
+
+                    0,
+
+                    0,
+
+                    640,
+
+                    480
+
+                );
+
+
+                /* =================================
+                   Convert to JPEG
+                ================================= */
+
+                const imageData =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.7
+                    );
+
+
+                /* =================================
+                   Send to Flask
+                ================================= */
+
+                const response =
+                    await fetch(
+                        "/process_frame",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    image:
+                                        imageData
+
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Recognition result:",
+                    data
+                );
+
+
+                /* =================================
+                   ATTENDANCE MARKED
+                ================================= */
+
+                if (
+                    data.status ===
+                    "Present"
+                ) {
+
+                    attendanceCompleted =
+                        true;
+
+
+                    /* Stop frame processing */
+
+                    if (
+                        frameInterval !==
+                        null
+                    ) {
+
+                        clearInterval(
+                            frameInterval
+                        );
+
+                        frameInterval =
+                            null;
+
+                    }
+
+
+                    /* =================================
+                       Show student name
+                    ================================= */
+
+                    document.getElementById(
+                        "detectedName"
+                    ).innerHTML =
+
+                        `${data.name}<br>
+                         <small>ID: ${data.id}</small>`;
+
+
+                    document.getElementById(
+                        "detectedName"
+                    ).className =
+                        "success";
+
+
+                    /* =================================
+                       Show attendance message
+                    ================================= */
+
+                    document.getElementById(
+                        "attendanceResult"
+                    ).innerHTML =
+                        "✅ Attendance Marked";
+
+
+                    document.getElementById(
+                        "attendanceResult"
+                    ).className =
+                        "success";
+
+
+                    /* =================================
+                       Update status
+                    ================================= */
+
+                    document.getElementById(
+                        "attendanceStatus"
+                    ).innerText =
+                        "Attendance completed successfully.";
+
+
+                    console.log(
+                        "Attendance successfully marked."
+                    );
+
+                }
+
+
+                /* =================================
+                   UNKNOWN PERSON
+                ================================= */
+
+                else if (
+                    data.status ===
+                    "unknown"
+                ) {
+
+                    document.getElementById(
+                        "detectedName"
+                    ).innerText =
+                        "Unknown";
+
+
+                    document.getElementById(
+                        "detectedName"
+                    ).className =
+                        "error";
+
+
+                    document.getElementById(
+                        "attendanceResult"
+                    ).innerText =
+                        "❌ Face Not Recognized";
+
+
+                    document.getElementById(
+                        "attendanceResult"
+                    ).className =
+                        "error";
+
+                }
+
+
+                /* =================================
+                   NO FACE
+                ================================= */
+
+                else if (
+                    data.name ===
+                    "No Face Detected"
+                ) {
+
+                    document.getElementById(
+                        "detectedName"
+                    ).innerText =
+                        "No Face Detected";
+
+
+                    document.getElementById(
+                        "detectedName"
+                    ).className =
+                        "waiting";
+
+
+                    document.getElementById(
+                        "attendanceResult"
+                    ).innerText =
+                        "Please look at the camera.";
+
+
+                    document.getElementById(
+                        "attendanceResult"
+                    ).className =
+                        "waiting";
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Frame processing error:",
+                    error
+                );
+
+            } finally {
+
+                processingFrame = false;
+
+            }
+
+        }
+
+
+
+        /* ==========================================
+           STOP ATTENDANCE
+        ========================================== */
+
+        async function stopAttendance() {
+
+            /* =================================
+               Stop frame processing
+            ================================= */
+
+            if (
+                frameInterval !==
+                null
+            ) {
+
+                clearInterval(
+                    frameInterval
+                );
+
+                frameInterval =
+                    null;
+
+            }
+
+
+            /* =================================
+               Stop camera
+            ================================= */
+
+            if (
+                cameraStream !==
+                null
+            ) {
+
+                cameraStream
+                    .getTracks()
+                    .forEach(
+                        track =>
+                            track.stop()
+                    );
+
+
+                cameraStream = null;
+
+            }
+
+
+            /* =================================
+               Remove camera from video
+            ================================= */
+
+            const video =
+                document.getElementById(
+                    "videoFeed"
+                );
+
+
+            video.srcObject = null;
+
+
+            /* =================================
+               Tell Flask to stop
+            ================================= */
+
+            try {
+
+                await fetch(
+                    "/stop_attendance"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Stop error:",
+                    error
+                );
+
+            }
+
+
+            /* =================================
+               GO DIRECTLY TO RECORDS
+            ================================= */
+
+            window.location.href =
+                "/view_attendance";
+
+        }
+
+    </script>
+
+</body>
+
+</html>

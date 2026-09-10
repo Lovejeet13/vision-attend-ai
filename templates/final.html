@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Attendance</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #D6E0E1;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Logo (Top Left) */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 350px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        /* Vision Attend Title */
+        .vision-title {
+            font-size: 100px;
+            font-weight: bold;
+            color: #031019;
+            margin-top: 20px;
+            margin-bottom: 0px;
+        }
+
+        /* Main Title */
+        .title {
+            font-size: 50px;
+            font-weight: bold;
+            color: #031019;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Container */
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border: 2px solid #031019;
+            width: 350px;
+        }
+
+        h2 {
+            color: #031019;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #031019;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #04202F;
+        }
+
+        /* Logo1 (Bottom Right) */
+        .logo1 {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo (Click to Redirect to Upload Page) -->
+    <img src="{{ url_for('static', filename='LOGO.png') }}" alt="Logo" class="logo" onclick="window.location.href='{{ url_for('home') }}'">
+
+    <!-- Vision Attend Title -->
+    <h1 class="vision-title">Vision Attend</h1>
+
+    <!-- Main Title -->
+    <h1 class="title">Final Attendance</h1>
+
+    <!-- Attendance Report Box -->
+    <div class="container">
+        <h2>Attendance Report</h2>
+        <a href="/view_attendance" class="btn">View Attendance</a>
+        <a href="/download_attendance" class="btn">Download CSV</a>
+    </div>
+
+    <!-- Logo1 (Bottom Right) -->
+    <img src="{{ url_for('static', filename='LOGO1.png') }}" alt="Logo1" class="logo1">
+
+</body>
+</html>

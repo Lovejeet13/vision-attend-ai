@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision Attend</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: #D6E0E1;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Logo (Top Left) */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 350px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        /* Vision Attend Title */
+        .title {
+            font-size: 100px;
+            font-weight: bold;
+            color: #031019;
+            margin-top: 50px;
+            margin-bottom: 25px;
+        }
+
+        /* Upload Box (Bigger & Centered) */
+        .container {
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+            width: 500px;
+            text-align: center;
+            border: 3px solid #031019;
+            margin-top: 0px;
+        }
+
+        h2 {
+            color: #031019;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        /* File Input */
+        input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #031019;
+            background: #f5f5f5;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        input[type="file"]:hover {
+            background: #e3f2fd;
+        }
+
+        /* Upload Button */
+        .upload-btn {
+            width: 100%;
+            padding: 15px;
+            background: #031019;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #04202F;
+        }
+
+       
+
+    </style>
+</head>
+<body>
+
+    <!-- Clickable Logo (Top Left) -->
+    <a href="#" onclick="location.reload(); return false;">
+        <img src="{{ url_for('static', filename='LOGO.png') }}" alt="Logo" class="logo">
+    </a>
+
+    <!-- Vision Attend Title -->
+    <h1 class="title">Vision Attend</h1>
+
+    <!-- Upload Box -->
+    <div class="container">
+        <h2>Upload Faces (ZIP File)</h2>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit" class="upload-btn">Upload</button>
+        </form>
+    </div>
+
+
+</body>
+</html>
